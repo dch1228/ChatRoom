@@ -1,0 +1,33 @@
+{% extends "layout/base.html" %}
+
+{% block nav-left %}
+	<ul class="nav navbar-nav">
+		<li class="active"><a href="/chat/">首页</a></li>
+		<li class="disabled"><a>聊天室</a></li>
+	</ul>
+{% endblock %}
+
+{% block content %}
+	<div id="home">
+		<div class="page-header">
+		<h1>{{ user }},欢迎来到聊天室!</h1>
+		<h3>全部房间</h3>
+		</div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>房间序号</th>
+					<th>房间名</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in RoomObj %}
+					<tr>
+						<th>{{ item.id }}</th>
+						<th><a href="/chat/{{ item.id }}">{{ item }}</a></th>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

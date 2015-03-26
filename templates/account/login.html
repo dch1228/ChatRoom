@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Login</title>
+		<link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css">
+	</head>
+
+<body class="container">
+<div class="container-fluid" style="margin-top: 30px">
+	<div class="well" style="width: 320px; margin-left: auto; margin-right: auto">
+		<h3 style="margin: 0 0 20px;font-family: 微软雅黑;">登录认证</h3>
+		<form action="/account/login/" method="POST">
+			{% csrf_token %}
+			<div id="div_id_username" class="clearfix">
+				<div class="form-group">
+					<label for="id_username">Username:</label>
+					<input type="text" name="username" maxlength="16" autocapitalize="off" autocorrect="off" class="form-control" id="id_username" required="">
+				</div>
+			</div>
+			<div id="div_id_password" class="clearfix">
+				<div class="form-group">
+					<label for="id_password">Password:</label>
+					<input type="password" name="password" maxlength="16" autocapitalize="off" autocorrect="off" class="form-control" id="id_password" required="">
+				</div>
+			</div>
+			<!--登录异常时的错误信息-->
+			<p style="color: red;">{{ loginStatus }}</p>
+			<input type="submit" name="submit" value="Log in" class="btn btn-primary form-control" id="submit-id-submit">
+		</form>
+	</div><!--/.well-->
+</div><!-- /.container-fluid -->
+</body>
+</html>
