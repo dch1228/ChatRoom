@@ -15,10 +15,7 @@
 		<div style="width: 600px;height: 500px;border: 1px solid #000000;float: left;overflow: auto;" id="chatting"></div>
 		<div style="width: 200px;height: 500px;border: 1px solid #000000;float: left;margin-left: 30px;">
 			<div style="border-bottom: 1px solid #000000;"><h4>在线列表:</h4></div>
-			<ul class="list-group" style="overflow: auto;height: 458px;">
-				{% for item in userlist %}
-					<li class="list-group-item">{{ item }}</li>
-				{% endfor %}
+			<ul id="onlinelist" class="list-group" style="overflow: auto;height: 458px;">
 			</ul>
 		</div>
 	</div>
@@ -78,7 +75,7 @@
 
 		function sendmsg(){
 			var sendTime = new Date().Format("yyyy-MM-dd hh:mm:ss");
-			var msg=$('#msg').val();
+			var msg = $('#msg').val();
 			var name = '{{ user.username }}';
 			var content = "<span style='color: green'>"+name+"&nbsp;"+sendTime+"</span><br><span>"+"&nbsp;"+msg+"</span></br>";
 			$('#msg').val("");
@@ -109,19 +106,42 @@
 			}
 
 		function updatechatting(arg){
-			var arg = $.parseJSON(arg);
+			var data = $.parseJSON(arg);
 			$("#chatting").empty();
-			$.each(arg, function(k,v){
+			$.each(data, function(k,v){
 				$("#chatting").append(v)
 			})
 		}
 
 		setInterval(function () {
-			var data;
-			var roomid = {{ roomObj.id }}
-			data = {roomid: roomid};
-			syncrequest('/chat/getmsg/',data,'get',updatechatting)
-		},5000);
+			var roomid={{ roomObj.id }};
+			var userid={{ user.id }};
+			var data = {roomid: roomid, userid: userid};
+			syncrequest('/chat/getmsg/',data,'get',updatechatting);
+			syncrequest('/chat/onlinelist/',data,'get',updateonlinelist);
+		},1000);
+
+
+		window.onbeforeunload = onbeforeunload_handler;
+
+		function onbeforeunload_handler(){
+			var warning = '退出房间?';
+			console.log('success');
+			var roomid={{ roomObj.id }};
+			var userid={{ user.id }};
+			var data = {roomid: roomid, userid: userid};
+			syncrequest('/chat/exitchat/', data,'post',null);
+			return warning
+		}
+
+		function updateonlinelist(arg){
+			var data = $.parseJSON(arg);
+			$("#onlinelist").empty();
+			$.each(data, function(k,v){
+				var content = '<li class="list-group-item">'+ v + '</li>';
+				$("#onlinelist").append(content)
+			});
+		}
 
 	</script>
 
